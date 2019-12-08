@@ -280,7 +280,7 @@ public class ComplexFunction implements complex_function {
         function cf = f.initFromString(s);
         System.out.println(cf);
         System.out.println(cf.f(2));
-
+    //change
     }
 
 }
