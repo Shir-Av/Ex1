@@ -3,25 +3,28 @@ package Ex1;
 import javax.management.RuntimeErrorException;
 
 public class ComplexFunction implements complex_function {
-    public Operation op ;
+    public Operation op;
     public function left;
     public function right;
 
-    public ComplexFunction(){
+    public ComplexFunction() {
         this.op = Operation.None;
         this.left = null;
         this.right = null;
     }
-    public ComplexFunction (Operation op , function f1, function f2){
+
+    public ComplexFunction(Operation op, function f1, function f2) {
         this.op = op;
         this.left = f1;
         this.right = f2;
     }
-    public ComplexFunction(ComplexFunction cf){
+
+    public ComplexFunction(ComplexFunction cf) {
         this.op = cf.op;
         this.left = cf.left;
         this.right = cf.right;
     }
+
     @Override
     public void plus(function f1) {
         ComplexFunction copied = new ComplexFunction(this);
@@ -88,69 +91,103 @@ public class ComplexFunction implements complex_function {
 
     @Override
     public double f(double x) {
-        return 0;
+
+        if(this.op == Operation.Plus) {
+            return this.left.f(x)+this.right.f(x);
+        }
+
+        else if(this.op == Operation.Times) {
+            return this.left.f(x)*this.right.f(x);
+        }
+
+        else if(this.op == Operation.Divid) {
+            if (this.right.f(x) == 0 ){
+                System.out.println("ERROR: cannot divide in zero");
+                return Integer.MIN_VALUE;
+            }
+            return this.left.f(x)/this.right.f(x);
+        }
+
+        else if(this.op == Operation.Max) {
+            return Math.max(this.left.f(x),this.right.f(x));
+        }
+
+        else if(this.op == Operation.Min) {
+            return Math.min(this.left.f(x),this.right.f(x));
+        }
+
+        else if(this.op == Operation.Comp) {
+            return this.left.f(this.right.f(x));
+        }
+
+        else // if this.op == none
+            return this.left.f(x);
     }
-//5x+7
+
+    //5x+7
     @Override
     public function initFromString(String s) {
         s.toLowerCase();
-        if (!basicFormat(s)){
-            System.out.println("ERROR: invalid input");
-        }
-        else {
-            if (!s.contains("(")){
-                if(s.contains("+") || s.contains("-")){
-                    function f = new Polynom(s);
-                    return f;
-                }
-                else {
-                    function f = new Monom(s);
-                    return f;
-                }
+        if (!s.contains("(")) {
+            if (s.contains("+") || s.contains("-")) {
+                Polynom p = new Polynom();
+                function f = p.initFromString(s);
+                return f;
+            } else {
+                Monom m = new Monom(0,0);
+                function f = m.initFromString(s);
+                return f;
             }
-            else {
-                String operation = s.substring(0, s.indexOf('('));
-                //System.out.println(operation);
-                        switch (operation)
-                                {
-                                    case "plus":
-                                        s.substring( s.indexOf('('));
-                                        return new ComplexFunction(Operation.Plus,initFromString(s.substring(1,s.indexOf(','))),
-                                                initFromString(s.substring(s.indexOf(',')+1,s.indexOf(')'))));
 
-                                    case "mul":
-                                        s.substring( s.indexOf('('));
-                                        return new ComplexFunction(Operation.Times,initFromString(s.substring(1,s.indexOf(','))),
-                                                initFromString(s.substring(s.indexOf(',')+1,s.indexOf(')'))));
+        } else if (!basicFormat(s)) {
+            System.out.println("ERROR: invalid input");
+        } else {
+            String operation = s.substring(0, s.indexOf('('));
+            switch (operation) {
+                case "plus":
+                    s.substring(s.indexOf('('));
+                    return new ComplexFunction(Operation.Plus, initFromString(s.substring(s.indexOf('(') + 1, s.indexOf(','))),
+                            initFromString(s.substring(s.indexOf(',') + 1, s.lastIndexOf(')'))));
 
-                                    case "div":
-                                        s.substring( s.indexOf('('));
-                                        return new ComplexFunction(Operation.Divid,initFromString(s.substring(1,s.indexOf(','))),
-                                                initFromString(s.substring(s.indexOf(',')+1,s.indexOf(')'))));
+                case "mul":
+                    s.substring(s.indexOf('('));
+                    return new ComplexFunction(Operation.Times, initFromString(s.substring(s.indexOf('(') + 1, s.indexOf(','))),
+                            initFromString(s.substring(s.indexOf(',') + 1, s.lastIndexOf(')'))));
 
-                                    case "max":
-                                        s.substring( s.indexOf('('));
-                                        return new ComplexFunction(Operation.Max,initFromString(s.substring(1,s.indexOf(','))),
-                                                initFromString(s.substring(s.indexOf(',')+1,s.indexOf(')'))));
+                case "div":
+                    s.substring(s.indexOf('('));
+                    return new ComplexFunction(Operation.Divid, initFromString(s.substring(s.indexOf('(') + 1, s.indexOf(','))),
+                            initFromString(s.substring(s.indexOf(',') + 1, s.lastIndexOf(')'))));
 
-                                    case "min":
-                                        s.substring( s.indexOf('('));
-                                        return new ComplexFunction(Operation.Min,initFromString(s.substring(1,s.indexOf(','))),
-                                                initFromString(s.substring(s.indexOf(',')+1,s.indexOf(')'))));
+                case "max":
+                    s.substring(s.indexOf('('));
+                    return new ComplexFunction(Operation.Max, initFromString(s.substring(s.indexOf('(') + 1, s.indexOf(','))),
+                            initFromString(s.substring(s.indexOf(',') + 1, s.lastIndexOf(')'))));
 
-                                    case "comp":
-                                        s.substring( s.indexOf('('));
-                                        return new ComplexFunction(Operation.Comp,initFromString(s.substring(1,s.indexOf(','))),
-                                                initFromString(s.substring(s.indexOf(',')+1,s.indexOf(')'))));
+                case "min":
+                    s.substring(s.indexOf('('));
+                    return new ComplexFunction(Operation.Min, initFromString(s.substring(s.indexOf('(') + 1, s.indexOf(','))),
+                            initFromString(s.substring(s.indexOf(',') + 1, s.lastIndexOf(')'))));
 
-                                    default:
-                                        System.out.println("ERROR: invalid operation");
-                                }
-            }   }
-        return null;
+
+                case "comp":
+                    s.substring(s.indexOf('('));
+                    return new ComplexFunction(Operation.Comp, initFromString(s.substring(s.indexOf('(') + 1, s.indexOf(','))),
+                            initFromString(s.substring(s.indexOf(',') + 1, s.lastIndexOf(')'))));
+
+                case "None":
+                    s.substring(s.indexOf('('));
+                    return new ComplexFunction(Operation.None, initFromString(s.substring(s.indexOf('(') + 1, s.indexOf(','))),
+                            null);
+
+                default:
+                    System.out.println("ERROR: invalid operation");
+            }
         }
+        return this;
+    }
 
-    
+
 
     public boolean basicFormat(String s) {
         int openParenthesis = 0;
@@ -171,22 +208,44 @@ public class ComplexFunction implements complex_function {
         }
         return true;
     }
-//(f1,min(f2,mul(f4,f5)))
+    //(f1,min(f2,mul(f4,f5)))
     @Override
     public function copy() {
-        /*function n = initFromString(this.toString());
-        if (this.left == null){
-            function c = new ComplexFunction(this.op, this, this.right);
-            return c;
-        }
-        function cCf = new ComplexFunction(this.op, this.left.copy(), this.right.copy());
-        return cCf;*/
-        return null;
+        ComplexFunction f = new ComplexFunction();
+        function n = f.initFromString(this.toString());
+        return n;
     }
     @Override
-    public String toString(){
-        return null;
+    public String toString() {
+
+        if(this.op == Operation.Plus) {
+            return "plus("+this.left.toString()+","+this.right.toString()+")";
+        }
+
+        else if(this.op == Operation.Times) {
+            return "mul("+this.left.toString()+","+this.right.toString()+")";
+        }
+
+        else if(this.op == Operation.Divid) {
+            return  "div("+this.left.toString()+","+this.right.toString()+")";
+        }
+
+        else if(this.op == Operation.Max) {
+            return "max("+this.left.toString()+","+this.right.toString()+")";
+        }
+
+        else if(this.op == Operation.Min) {
+            return "min("+this.left.toString()+","+this.right.toString()+")";
+        }
+
+        else if(this.op == Operation.Comp) {
+            return "comp("+this.left.toString()+","+this.right.toString()+")";
+        }
+
+        else // if this.op == none
+            return this.left.toString();
     }
+
     @Override
     public boolean equals(Object obj){
         return false;
@@ -194,29 +253,27 @@ public class ComplexFunction implements complex_function {
 
     public static void main(String[] args) {
         function f1 = new Polynom("2x^2+5");
-        function f2 = new Polynom("6x^7-15");
+        function f2 = new Polynom("x^2-4");
         function f3 = new Monom("115x");
         function f4 = new Polynom( "555x+666x^6");
-        /*ComplexFunction bdika = new ComplexFunction(Operation.Plus, f1, f2);
+        /*ComplexFunction bdika = new ComplexFunction(Operation.Divid, f1, f2);
         ComplexFunction copyCf =(ComplexFunction)(bdika.copy());
-       *//* System.out.println("test 1");
-        System.out.println("BDIKA:    "+bdika.op+"  op,   "+ bdika.left +"  left,  "+ bdika.right + "  right,  ");
-        System.out.println("COPIED:    "+copyCf.op+"  op,   "+ copyCf.left +"  left,  "+ copyCf.right + "  right,  ");
+        System.out.println("test 1");
+        System.out.println("BDIKA:    "+bdika);
+        System.out.println("COPIED:    "+ copyCf);
         System.out.println("test 2");
-        copyCf.right = f3;
-        System.out.println("BDIKA:    "+bdika.op+"  op,   "+ bdika.left +"   left,  "+ bdika.right + "  right,  ");
-        System.out.println("COPIED:    "+copyCf.op+"  op,   "+ copyCf.left +"  left,  "+ copyCf.right + "  right,  ");*//*
-        bdika.plus(f4);
-        System.out.println("AFTER PLUS BDIKA:    "+bdika.op+"  op,   "+ bdika.left +"  left,  "+ bdika.right + "  right,  ");
-        */
-        String s ="comp(2x^2+5,min(6x^7-15,mul(115x,555x+666x^6)))";
+        copyCf.plus(f3);
+        System.out.println("BDIKA:  AFTER PLUS    "+bdika);
+        System.out.println("COPIED: AFTER PLUS    "+copyCf);*/
+        //bdika.plus(f4);
+        // System.out.println("AFTER PLUS BDIKA:    "+bdika.op+"  op,   "+ bdika.left +"  left,  "+ bdika.right + "  right,  ");
+
+        String s ="comp(2x^2+5,min(6x^7-15,mul(115x,555x+666x^3)))";
         ComplexFunction f = new ComplexFunction();
         function cf = f.initFromString(s);
-        System.out.println(cf + "hi");
-        /*String operation = s.substring( s.indexOf('('));
-        System.out.println(operation);*/
-
+        System.out.println(cf);
+        System.out.println(cf.f(2));
 
     }
 
-}
+    }
