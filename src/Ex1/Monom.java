@@ -70,7 +70,7 @@ public class Monom implements function{
 			    		   this._coefficient = -1; // sets the coefficient to be '-1'
 			    		   this._power =1; //sets the power to be '1'
 			    	   }
-			    	   
+
 			    	   else { // if the first string in the first cell of parts is not equal to '-'
 					   this._coefficient = Double.parseDouble(parts[0]); // sets the coefficient to be the string in the first cell of parts and changes it to type double
 				       this._power =1; // sets the power to be double
