@@ -52,6 +52,10 @@ public class Monom implements function{
 		try {
 			s.toLowerCase(); // changes the char from capital letters to small letters
 			if (s.contains("x")) { // checks if the given string contains the char 'x'. if yes then:
+				s = s.replace(" ","");
+				if(s.charAt(0) == '+'){
+					s = s.substring(1);
+				}
 				String[] parts = s.split("x"); // splits the string s by removing the char 'x' and pushing the parts before and after 'x' into different parts of a new array named parts 
 				if ((s.charAt(0) == 'x')) { // if the first char of the given string is 'x' then:
 					//1*x^1 = x
@@ -87,7 +91,7 @@ public class Monom implements function{
 			       }	
 				}
 			//_*x^0= _
-			else { 
+			else {
 				this._coefficient = Double.parseDouble(s); // sets the coefficient to be string s and change to type double 
 			    this._power = 0;
 			}

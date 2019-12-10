@@ -30,6 +30,10 @@ package Ex1;
 		 */
 		public Polynom(String s) {
 				try{ s = s.toLowerCase(); //change the capital letters to small letters.
+					s = s.replace(" ","");
+					if(s.charAt(0) == '+') {
+						s = s.substring(1);
+					}
 				poly = new ArrayList<Monom>(); // Define a new ArrayList of type Monom.
 				String[] st = s.split("[+]"); //split the string and Remove all the char "+" from the string and push it to array 
 				
@@ -187,18 +191,7 @@ package Ex1;
 		/**
 		 * this function returns true if the polynom equals zero
 		 */
-		/*public boolean isZero() {
-			boolean flag = false; //define a boolean flag and reset it to false
-			Iterator<Monom> iter1 = poly.iterator(); //sets an iterator on the original polynom
-			while (iter1.hasNext()) { //runs on the polynom until the end
-				Monom tmp1 = iter1.next(); //define a variable of type monom to be the pointer  of the iterator tmp1
-				if (tmp1.isZero()) { //checks if the monom pointed by the iterator equals zero using monom function
-					flag = true; //sets flag to true
-				} 
-				else return false;	//if the monom pointed by the iterator doesnt equals zero return false
-			}
-			return flag; //returns the set of falg
-		}*/
+
 		public boolean isZero() { // function that check if all the Monoms in the polynom equals 0;
 			Iterator<Monom> iter = poly.iterator();
 			while (iter.hasNext()) {
@@ -296,6 +289,10 @@ package Ex1;
 		public String toString() {
 			String ans ="";
 			Iterator<Monom> iter = poly.iterator();
+			if (iter.hasNext()){
+				Monom first = iter.next();
+				ans += first.toString();
+			}
 			while (iter.hasNext()) {
 				Monom t = iter.next();
 				if (t.get_coefficient() >= 0) {
