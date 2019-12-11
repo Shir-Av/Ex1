@@ -161,11 +161,12 @@ public class ComplexFunction implements complex_function {
                 function f = m.initFromString(s);
                 return f;
             }
-
         } else if (!basicFormat(s)) {
             System.out.println("ERROR: invalid input");
         } else {
             String operation = s.substring(0, s.indexOf('('));
+            /*return new ComplexFunction(oper(operation), initFromString(s.substring(s.indexOf('(') + 1 , middle(s))),
+                    initFromString(s.substring(middle(s) + 1, s.lastIndexOf(')'))));*/
             switch (operation) {
                 case "plus":
                     return new ComplexFunction(Operation.Plus, initFromString(s.substring(s.indexOf('(') + 1 , middle(s))),
@@ -247,26 +248,6 @@ public class ComplexFunction implements complex_function {
             }
         }
         return mid+finalMid;
-       /* int i = 0;
-        int counter = -1;
-        while (i < s.length()-1) {
-            if (s.charAt(i) == '(') {
-                counter++;
-            } else if (s.charAt(i) == ')') {
-                counter--;
-            }
-            // System.out.println(s);
-            else if (s.charAt(i) == ',') {
-                if (counter == 0) {
-                    System.out.println(s + "  string  " + i + "index");
-                    i++;
-                    return i;
-                }
-            }
-            i++;
-        }
-        System.out.println(s.length() +"  length  - index" + i);
-        return i;*/
     }
     @Override
     public function copy () {

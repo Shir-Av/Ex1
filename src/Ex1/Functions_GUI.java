@@ -1,11 +1,11 @@
 package Ex1;
 
 
+import com.google.gson.Gson;
+import sun.plugin2.util.ColorUtil;
+
 import java.awt.*;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.*;
 import java.util.Random;
 
@@ -13,7 +13,6 @@ import java.util.Random;
 public class Functions_GUI implements functions {
 
     ArrayList<function> f = new ArrayList<function>();
-    //Iterator<function> iterator = f.iterator();
 
     @Override
     public void initFromFile(String file) throws IOException {
@@ -27,12 +26,9 @@ public class Functions_GUI implements functions {
             System.out.println("File not found");
             e.printStackTrace();
         }
-        line = scan.nextLine();
-        while (scan.hasNext() || line != null) {
+        while (scan.hasNext()) {
+            line = scan.nextLine();
             f.add((cf.initFromString(line)));
-            if (scan.hasNext()) {
-                line = scan.nextLine();
-            } else break;
         }
         for(int i = 0; i < f.size(); i++) {
             String fString = f.get(i).toString();
@@ -61,50 +57,71 @@ public class Functions_GUI implements functions {
 
     @Override
     public void drawFunctions(int width, int height, Range rx, Range ry, int resolution) {
-        Random rand = new Random();
-        float r = rand.nextFloat();
-        float g = rand.nextFloat();
-        float b = rand.nextFloat();
-        Color randomColor = new Color(r, g, b);
-        StdDraw.setCanvasSize(width, height);
-        StdDraw.setXscale(rx.get_min(), rx.get_max());
-        StdDraw.setYscale(ry.get_min(), ry.get_max());
+        createCoordinateSystem(width,height,rx,ry);
         double rxRes = (Math.abs(rx.get_max()) + Math.abs(rx.get_min()));
         double x_step = (rxRes/resolution);
-        // double x_step = (rx.get_max()-rx.get_min())/resolution;
-        StdDraw.setPenColor(StdDraw.BLACK);
-        StdDraw.setPenRadius(0.005);
-        StdDraw.line(rx.get_min(),0, rx.get_max(), 0);
-        StdDraw.line(0, ry.get_min(), 0, ry.get_max());
-        Font font = new Font("Arial", Font.BOLD, 15);
-        StdDraw.setFont(font);
-        for(int  n = (int)rx.get_min(); n<rx.get_max();n++){
-            StdDraw.setPenColor(StdDraw.GRAY);
-            if(n==0){continue;}
-            StdDraw.text(n, 0.3, ""+n);
-        }
-        for(int  n = (int)ry.get_min(); n<ry.get_max();n++){
-            StdDraw.setPenColor(StdDraw.GRAY);
-            if(n==0){continue;}
-            StdDraw.text(0.3, n, ""+n);
-        }
         Iterator<function> iterator = f.iterator();
-        while (iterator.hasNext() || iterator.next() != null){
+        while (iterator.hasNext()){
+            StdDraw.setPenColor(f_color());
             function fun = iterator.next();
-            if (iterator.hasNext()) {
-                fun = iterator.next();
-            } else break;
-            StdDraw.setPenColor(randomColor);
             for (double i = rx.get_min(); i <= rx.get_max(); i +=x_step){
-                StdDraw.point(i , fun.f(i));
+                StdDraw.line(i,fun.f(i),i+x_step,fun.f(i+x_step));
             }
         }
 
     }
+    private void createCoordinateSystem(int width, int height, Range rx, Range ry){
+        StdDraw.setCanvasSize(width, height);
+        StdDraw.setXscale(rx.get_min()-0.3, rx.get_max()+0.3);
+        StdDraw.setYscale(ry.get_min()-0.3, ry.get_max()+0.3);
+        //drawing the basic coordinate system
+        StdDraw.setPenColor(Color.LIGHT_GRAY);
+        for (double i = rx.get_min(); i <= rx.get_max(); i++) {
+            StdDraw.line(i, ry.get_min(), i, ry.get_max());
+        }
+        for (double i = ry.get_min(); i <= ry.get_max(); i++) {
+            StdDraw.line(rx.get_min(), i, rx.get_max(), i);
+        }
+        //drawing X & Y Axis.
+        StdDraw.setPenColor(Color.BLACK);
+        StdDraw.setPenRadius(0.005);
+        StdDraw.setFont(new Font("Ariel", Font.BOLD, 15));
+
+        StdDraw.line(0, ry.get_min(), 0, ry.get_max());
+        for (double i = ry.get_min(); i <= ry.get_max(); i++) {
+            if (i != 0)
+                StdDraw.text(-0.3, i - 0.07, Integer.toString((int)i));
+        }
+
+        StdDraw.line(rx.get_min(), 0, rx.get_max(), 0);
+        for (double i = rx.get_min(); i <= rx.get_max(); i++) {
+            StdDraw.text(i - 0.07, -0.3, Integer.toString((int)i));
+        }
+    }
+    private Color f_color(){
+        Random rand = new Random();
+        int r = rand.nextInt(255);
+        int g = rand.nextInt(255);
+        int b = rand.nextInt(255);
+        Color randomColor = new Color(r,g,b);
+        return randomColor;
+    }
 
     @Override
     public void drawFunctions(String json_file) {
-
+        Gson gson = new Gson();
+        try {
+            FileReader reader = new FileReader(json_file);
+            Jsonparam jp = gson.fromJson(new FileReader(json_file), Jsonparam.class);
+            Range rx = new Range(jp.Range_X[0], jp.Range_X[1]);
+            Range ry = new Range(jp.Range_Y[0], jp.Range_Y[1]);
+            drawFunctions(jp.Width, jp.Height, rx, ry, jp.Resolution);
+        } catch (Exception e) {
+            System.out.println("The Json file is incorrect, draws diffult");
+            Range rx = new Range(-15, 15);
+            Range ry = new Range(-15, 15);
+            drawFunctions(800, 600, rx, ry, 500);
+        }
     }
     @Override
     public int size() {
@@ -184,7 +201,7 @@ public class Functions_GUI implements functions {
         f.clear();
     }
 
-    public static functions FunctionsFactory() {
+   /* public static functions FunctionsFactory() {
         functions ans = new Functions_GUI();
         String s1 = "3.1+2.4x^2-x^4";
         String s2 = "5+2x-3.3x+0.1x^5";
@@ -198,7 +215,7 @@ public class Functions_GUI implements functions {
         }
         ComplexFunction cf = new ComplexFunction(Operation.Plus, p1, p2);
         //remmember to change the constructor.
-        ComplexFunction cf4 = new ComplexFunction(Operation.Divid, new Polynom("x+1"), cf3);
+        ComplexFunction cf4 = new ComplexFunction("div", new Polynom("x+1"), cf3);
         cf4.plus(new Monom("2"));
         ans.add(cf.copy());
         ans.add(cf4.copy());
@@ -221,14 +238,14 @@ public class Functions_GUI implements functions {
         ans.add(max);
         ans.add(min);
         return ans;
-    }
+    }*/
     public static void main(String[] args) throws IOException {
-        File file1 = new File("C:\\MATALA\\function_file.txt");
-        // String file2 = new String("");
+       /* File file1 = new File("C:\\MATALA\\function_file.txt");
+         String file2 = new String("");
         Functions_GUI gf =new Functions_GUI();
-        //  gf.initFromFile("C:\\MATALA\\function_file.txt");
-        // gf.saveToFile(file2);
-        Functions_GUI gf1 = new Functions_GUI();
+          gf.initFromFile("C:\\MATALA\\function_file.txt");
+         gf.saveToFile(file2);*/
+        //Functions_GUI gf1 = new Functions_GUI();
 
         //(plus(div(1.0x+1.0,mul(mul(1.0x+3.0,1.0x-2.0),1.0x-4.0)),2.0));
         //  div(plus(-1.0x^4+2.4x^2+3.1,0.1x^5-1.2999999999999998x+5.0),-1.0x^4+2.4x^2+3.1)
@@ -236,8 +253,14 @@ public class Functions_GUI implements functions {
         //gf1.add()
 
         //gf.drawFunctions(2500, 2000,new Range(-50, 50), new Range(-50, 50), 100);
-        functions fun = FunctionsFactory();
-        fun.drawFunctions(1000, 500,new Range(-50, 50), new Range(-50, 50), 10000);
+      /*  functions fun = FunctionsFactory();
+        fun.drawFunctions(1500, 800,new Range(-17, 17), new Range(-17, 20), 200);*/
+        //functions fun = FunctionsFactory();
+        //  fun.drawFunctions(1000, 600,new Range(-10, 10), new Range(-15, 5), 400);
+        Functions_GUI fun = new Functions_GUI();
+        fun.initFromFile("C:\\MATALA\\function_file.txt");
+        fun.drawFunctions("C:\\MATALA\\GUI_params.txt");
+        // fun.drawFunctions("C:\\Users\\User\\Downloads\\GUI_params.txt");
     }
 
 

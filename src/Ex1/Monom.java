@@ -96,7 +96,7 @@ public class Monom implements function{
 				this._power = 0;
 			}
 		}catch (Exception e) {
-			System.out.println("The string format is invalid ITS ME");
+			System.out.println("The string format is invalid ");
 		}
 	}
 	/**
