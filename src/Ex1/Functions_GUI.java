@@ -38,7 +38,7 @@ public class Functions_GUI implements functions {
     @Override
     public void saveToFile(String file) throws IOException {
         try {
-            File file1 = new File("string file.txt");
+            File file1 = new File(file);
             FileWriter fw = new FileWriter(file1);
             PrintWriter pw = new PrintWriter(fw);
             Iterator<function> iterator = f.iterator();
@@ -201,67 +201,6 @@ public class Functions_GUI implements functions {
         f.clear();
     }
 
-   /* public static functions FunctionsFactory() {
-        functions ans = new Functions_GUI();
-        String s1 = "3.1+2.4x^2-x^4";
-        String s2 = "5+2x-3.3x+0.1x^5";
-        String[] s3 = {"x+3", "x-2", "x-4"};
-        Polynom p1 = new Polynom(s1);
-        Polynom p2 = new Polynom(s2);
-        Polynom p3 = new Polynom(s3[0]);
-        ComplexFunction cf3 = new ComplexFunction(p3);
-        for (int i = 1; i < s3.length; i++) {
-            cf3.mul(new Polynom(s3[i]));
-        }
-        ComplexFunction cf = new ComplexFunction(Operation.Plus, p1, p2);
-        //remmember to change the constructor.
-        ComplexFunction cf4 = new ComplexFunction("div", new Polynom("x+1"), cf3);
-        cf4.plus(new Monom("2"));
-        ans.add(cf.copy());
-        ans.add(cf4.copy());
-        cf.div(p1);
-        ans.add(cf.copy());
-        String s = cf.toString();
-        function cf5 = cf4.initFromString(s1);
-        function cf6 = cf4.initFromString(s2);
-        ans.add(cf5.copy());
-        ans.add(cf6.copy());
-        Iterator<function> iter = ans.iterator();
-        function f = iter.next();
-        ComplexFunction max = new ComplexFunction(f);
-        ComplexFunction min = new ComplexFunction(f);
-        while (iter.hasNext()) {
-            f = iter.next();
-            max.max(f);
-            min.min(f);
-        }
-        ans.add(max);
-        ans.add(min);
-        return ans;
-    }*/
-    public static void main(String[] args) throws IOException {
-       /* File file1 = new File("C:\\MATALA\\function_file.txt");
-         String file2 = new String("");
-        Functions_GUI gf =new Functions_GUI();
-          gf.initFromFile("C:\\MATALA\\function_file.txt");
-         gf.saveToFile(file2);*/
-        //Functions_GUI gf1 = new Functions_GUI();
-
-        //(plus(div(1.0x+1.0,mul(mul(1.0x+3.0,1.0x-2.0),1.0x-4.0)),2.0));
-        //  div(plus(-1.0x^4+2.4x^2+3.1,0.1x^5-1.2999999999999998x+5.0),-1.0x^4+2.4x^2+3.1)
-        // function f1 = new ComplexFunction("plus(-1.0x^4+2.4x^2+3.1,0.1x^5-1.2999999999999998x+5.0)")
-        //gf1.add()
-
-        //gf.drawFunctions(2500, 2000,new Range(-50, 50), new Range(-50, 50), 100);
-      /*  functions fun = FunctionsFactory();
-        fun.drawFunctions(1500, 800,new Range(-17, 17), new Range(-17, 20), 200);*/
-        //functions fun = FunctionsFactory();
-        //  fun.drawFunctions(1000, 600,new Range(-10, 10), new Range(-15, 5), 400);
-        Functions_GUI fun = new Functions_GUI();
-        fun.initFromFile("C:\\MATALA\\function_file.txt");
-        fun.drawFunctions("C:\\MATALA\\GUI_params.txt");
-        // fun.drawFunctions("C:\\Users\\User\\Downloads\\GUI_params.txt");
-    }
 
 
 }

@@ -115,8 +115,7 @@ public class Monom implements function{
 			else this._coefficient += m._coefficient; // adds the coefficient of the users monom to the given nonom
 		}
 		else {
-			System.out.println("Cannot add two Monoms with a diffrent power");
-		}
+			return;		}
 	}
 	/**
 	 * this function multiplies tow monoms

@@ -1,7 +1,9 @@
 package Ex1Testing;
 
+import java.io.IOException;
 import java.util.Iterator;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -32,10 +34,10 @@ import Ex1.functions;
 class Functions_GUITest {
     public static void main(String[] a) {
         functions data = FunctionsFactory();
-        //	int w=1000, h=600, res=200;
-        //	Range rx = new Range(-10,10);
-        //	Range ry = new Range(-5,15);
-//		data.drawFunctions(w,h,rx,ry,res);
+        	int w=1000, h=600, res=200;
+        	Range rx = new Range(-10,10);
+        	Range ry = new Range(-5,15);
+		data.drawFunctions(w,h,rx,ry,res);
         String file = "function_file.txt";
         String file2 = "function_file2.txt";
         try {
@@ -49,42 +51,67 @@ class Functions_GUITest {
         String JSON_param_file = "GUI_params.txt";
         data.drawFunctions(JSON_param_file);
     }
+
     private functions _data=null;
-//	@BeforeAll
-//	static void setUpBeforeClass() throws Exception {
-//	}
+	/*@BeforeAll
+	static void setUpBeforeClass() throws Exception {
+	}*/
 
     @BeforeEach
     void setUp() throws Exception {
         _data = FunctionsFactory();
     }
 
-    //@Test
-    void testFunctions_GUI() {
-        //	fail("Not yet implemented");
-    }
 
-    //@Test
+    @Test
     void testInitFromFile() {
-        //	fail("Not yet implemented");
+        Functions_GUI fun = new Functions_GUI();
+        try {
+            fun.initFromFile("testfiles/function_file.txt");
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
-    //@Test
+    @Test
     void testSaveToFile() {
-
+        Functions_GUI fun1 = new Functions_GUI();
+        Functions_GUI fun2 = new Functions_GUI();
+        Functions_GUI fun3 = new Functions_GUI();
+        try {
+            String s = "plus(max(12x^5,14),plus(22x,44x^3))";
+            fun1.add(new ComplexFunction().initFromString(s));
+            fun1.saveToFile("testfiles/myFunctions.txt");
+            fun2.initFromFile("testfiles/myFunctions.txt");
+            fun3.initFromFile("testfiles/function_file.txt");
+            fun3.saveToFile("newfunctionfile.txt");
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
     }
 
-    //@Test
+    @Test
     void testDrawFunctions() {
-        //_data.drawFunctions();
-        //	fail("Not yet implemented");
+        Functions_GUI fun = new Functions_GUI();
+        try {
+            fun.initFromFile("testfiles/function_file.txt");
+            fun.drawFunctions("test_files/GUI_params.txt");
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     @Test
     void testDrawFunctionsIntIntRangeRangeInt() {
-        _data.drawFunctions("GUI_params.txt");
-        //fail("Not yet implemented");
+        Functions_GUI data = (Functions_GUI) FunctionsFactory();
+        int w=1000, h=600, res=200;
+        Range rx = new Range(-10,10);
+        Range ry = new Range(-5,15);
+        data.drawFunctions(w,h,rx,ry,res);
     }
     public static functions FunctionsFactory() {
         functions ans = new Functions_GUI();

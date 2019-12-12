@@ -165,39 +165,8 @@ public class ComplexFunction implements complex_function {
             System.out.println("ERROR: invalid input");
         } else {
             String operation = s.substring(0, s.indexOf('('));
-            /*return new ComplexFunction(oper(operation), initFromString(s.substring(s.indexOf('(') + 1 , middle(s))),
-                    initFromString(s.substring(middle(s) + 1, s.lastIndexOf(')'))));*/
-            switch (operation) {
-                case "plus":
-                    return new ComplexFunction(Operation.Plus, initFromString(s.substring(s.indexOf('(') + 1 , middle(s))),
-                            initFromString(s.substring(middle(s) + 1, s.lastIndexOf(')'))));
-
-                case "mul":
-                    return new ComplexFunction(Operation.Times, initFromString(s.substring(s.indexOf('(') + 1, middle(s))),
-                            initFromString(s.substring(middle(s) + 1, s.lastIndexOf(')'))));
-
-                case "div":
-                    return new ComplexFunction(Operation.Divid, initFromString(s.substring(s.indexOf('(') + 1, middle(s))),
-                            initFromString(s.substring(middle(s) + 1, s.lastIndexOf(')'))));
-
-                case "max":
-                    return new ComplexFunction(Operation.Max, initFromString(s.substring(s.indexOf('(') + 1, middle(s))),
-                            initFromString(s.substring(middle(s) + 1, s.lastIndexOf(')'))));
-                case "min":
-                    return new ComplexFunction(Operation.Min, initFromString(s.substring(s.indexOf('(') + 1, middle(s))),
-                            initFromString(s.substring(middle(s) + 1, s.lastIndexOf(')'))));
-
-                case "comp":
-                    return new ComplexFunction(Operation.Comp, initFromString(s.substring(s.indexOf('(') + 1, middle(s))),
-                            initFromString(s.substring(middle(s) + 1, s.lastIndexOf(')'))));
-
-                case "None":
-                    return new ComplexFunction(Operation.None, initFromString(s.substring(s.indexOf('(') + 1, middle(s))),
-                            null);
-
-                default:
-                    System.out.println("ERROR: invalid operation");
-            }
+            return new ComplexFunction(oper(operation), initFromString(s.substring(s.indexOf('(') + 1 , middle(s))),
+                    initFromString(s.substring(middle(s) + 1, s.lastIndexOf(')'))));
         }
         return this;
     }
@@ -284,36 +253,6 @@ public class ComplexFunction implements complex_function {
             }
         }
         return true;
-    }
-
-    public static void main (String[]args){
-      /*  function f1 = new Polynom("2x^2+5");
-        function f2 = new Polynom("x^2-4");
-        function f3 = new Monom("115x");
-        function f4 = new Polynom( "555x+666x^6");
-        ComplexFunction bdika = new ComplexFunction(Operation.Divid, f1, f2);
-        ComplexFunction copyCf =(ComplexFunction)(bdika.copy());
-        System.out.println("test 1");
-        System.out.println("BDIKA:    "+bdika);
-        System.out.println("COPIED:    "+ copyCf);
-        System.out.println("test 2");
-        copyCf.plus(f3);
-        System.out.println("BDIKA:  AFTER PLUS    "+bdika);
-        System.out.println("COPIED: AFTER PLUS    "+copyCf);
-        //bdika.plus(f4);
-        // System.out.println("AFTER PLUS BDIKA:    "+bdika.op+"  op,   "+ bdika.left +"  left,  "+ bdika.right + "  right,  ");
-
-        String s ="comp(2x^2+5,min(6x^7-15,mul(115x,555x+666x^3)))";*/
-        String s = "max(max(max(max(plus(-1.0x^4+2.4x^2+3.1,+0.1x^5-1.2999999999999998x+5.0),plus(div(+1.0x+1.0,mul(mul(+1.0x +3.0,+1.0x-2.0),+1.0x-4.0)),2.0)),div(plus(-1.0x^4+2.4x^2+3.1,+0.1x^5-1.2999999999999998x+5.0),-1.0x^4+2.4x^2+3.1)),-1.0x^4+2.4x^2+3.1),+0.1x^5-1.2999999999999998x+5.0)";
-        // System.out.println(s);
-        System.out.println("                                                          ");
-        ComplexFunction f = new ComplexFunction();
-        function cf = f.initFromString(s);
-        System.out.println(cf + "          FINAL STRING      ");
-        //System.out.println(cf.f(2));
-        // String s ="plus(div(+1.0x+1.0,mul(mul(+1.0x+3.0,+1.0x-2.0),+1.0x-4.0)),2.0)";
-        //s = s.substring(s.indexOf('(')+1);
-
     }
 
 }
