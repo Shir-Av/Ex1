@@ -91,7 +91,19 @@ public class Polynom implements Polynom_able{
 		Iterator<Monom> iter = p1.iteretor();  //sets an iterator
 		while(iter.hasNext()) {  //runs on the polynom until the end
 			Monom temp = iter.next(); //define a variable of type monom to be the pointer  of the iterator
+			if(temp.isZero()){
+				continue;
+			}
 			this.add(temp); //adds the monom pointed by the iterator using monom's add function
+		}
+		deleteZero(this);
+	}
+	private void deleteZero(Polynom_able p1){
+		Iterator<Monom> iter = p1.iteretor();
+		while (iter.hasNext()){
+			if(iter.next().equals(Monom.ZERO)){
+				iter.remove();
+			}
 		}
 	}
 	/**

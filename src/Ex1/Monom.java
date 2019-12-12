@@ -109,7 +109,10 @@ public class Monom implements function{
 			this._power = m._power;
 		}
 		else if (this._power == m._power) {  // check if the power of the monom is equal
-			this._coefficient += m._coefficient; // adds the coefficient of the users monom to the given nonom
+			if (this._coefficient + m._coefficient == 0){
+				this.set_coefficient(0);
+			}
+			else this._coefficient += m._coefficient; // adds the coefficient of the users monom to the given nonom
 		}
 		else {
 			System.out.println("Cannot add two Monoms with a diffrent power");
